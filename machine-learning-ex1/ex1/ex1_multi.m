@@ -46,15 +46,6 @@ fprintf(' x = [%.0f %.0f], y = %.0f \n', [X(1:10,:) y(1:10,:)]');
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
-% Scale features and set them to zero mean
-fprintf('Normalizing Features ...\n');
-
-[X mu sigma] = featureNormalize(X);
-
-% Add intercept term to X
-X = [ones(m, 1) X];
-
-
 %% ================ Part 2: Gradient Descent ================
 
 % ====================== YOUR CODE HERE ======================
@@ -85,9 +76,17 @@ fprintf('Running gradient descent ...\n');
 alpha = 0.01;
 num_iters = 400;
 
+% Scale features and set them to zero mean
+fprintf('Normalizing Features ...\n');
+
+[Xn mu sigma] = featureNormalize(X);
+
+% Add intercept term to X
+Xn = [ones(m, 1) Xn];
+
 % Init Theta and Run Gradient Descent 
 theta = zeros(3, 1);
-[theta, J_history] = gradientDescentMulti(X, y, theta, alpha, num_iters);
+[theta, J_history] = gradientDescentMulti(Xn, y, theta, alpha, num_iters);
 
 % Plot the convergence graph
 figure;
@@ -105,9 +104,35 @@ fprintf('\n');
 % Recall that the first column of X is all-ones. Thus, it does
 % not need to be normalized.
 price = 0; % You should change this
-
-
 % ============================================================
+
+%reload data to make sure it's clean
+data = load('ex1data2.txt');
+X = data(:, 1:2);
+y = data(:, 3);
+m = length(y);
+
+%set GD params
+alpha = 0.3;
+num_iters = 400;
+
+%normalize X
+[Xn mu sigma] = featureNormalize(X);
+
+%add the intercept term
+Xn = [ones(m, 1) Xn];
+
+%init theta, do GD
+theta = zeros(3, 1);
+[theta J_history] = gradientDescentMulti(Xn, y, theta, alpha, num_iters);
+
+%now we have theta, define target X case
+targetX = [1650 3];
+targetXn = featureNormalize(targetX);
+targetXn = [1 targetXn];
+
+%use h(x) to calculate y
+price = targetXn * theta;
 
 fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
          '(using gradient descent):\n $%f\n'], price);
@@ -151,6 +176,12 @@ fprintf('\n');
 % ====================== YOUR CODE HERE ======================
 price = 0; % You should change this
 
+%now we have theta, define target X case
+targetX = [1650 3];
+targetX = [1 targetX];
+
+%use h(x) to calculate y
+price = targetX * theta;
 
 % ============================================================
 

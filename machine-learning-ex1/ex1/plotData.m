@@ -22,4 +22,8 @@ figure; % open a new figure window
 
 % ============================================================
 
+plot(x, y, 'rx', 'MarkerSize', 10);
+ylabel('Profit (10,000)');
+xlabel('Population (10,000)');
+
 end

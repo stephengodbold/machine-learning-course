@@ -56,10 +56,11 @@ theta = zeros(2, 1); % initialize fitting parameters
 
 % Some gradient descent settings
 iterations = 1500;
+%note: 0.01, 0.03, 0.1, 0.3, 1, 3 are the alpha increases that are useful for increasing learning rates
 alpha = 0.01;
 
-fprintf('\nTesting the cost function ...\n')
 % compute and display initial cost
+fprintf('\nTesting the cost function ...\n')
 J = computeCost(X, y, theta);
 fprintf('With theta = [0 ; 0]\nCost computed = %f\n', J);
 fprintf('Expected cost value (approx) 32.07\n');
