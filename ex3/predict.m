@@ -22,12 +22,14 @@ p = zeros(size(X, 1), 1);
 %
 
 
+X = [ones(m, 1) X]; %add the bias bit
+firstRound = sigmoid(X*Theta1');
 
+firstRound = [ones(m,1) firstRound]; %add the bias bit
+secondRound = sigmoid(firstRound*Theta2');
 
-
-
-
-
+[x, ix] = max(secondRound, [], 2); %return the max value for predictions along the 2nd dimension (row)
+p = ix;
 
 % =========================================================================
 

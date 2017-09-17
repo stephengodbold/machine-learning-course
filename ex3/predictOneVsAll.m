@@ -30,13 +30,10 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+predictions = sigmoid(X*all_theta');
 
-
-
-
-
+[x, ix] = max(predictions, [], 2); %return the max value for predictions along the 2nd dimension (row)
+p = ix;
 
 % =========================================================================
-
-
 end

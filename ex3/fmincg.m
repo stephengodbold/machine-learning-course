@@ -77,8 +77,8 @@ fX = [];
 [f1 df1] = eval(argstr);                      % get function value and gradient
 i = i + (length<0);                                            % count epochs?!
 s = -df1;                                        % search direction is steepest
-d1 = -s'*s;                                                 % this is the slope
-z1 = red/(1-d1);                                  % initial step is red/(|s|+1)
+d1 = -s'*s;                                      % this is the slope
+z1 = red/(1-d1);                                 % initial step is red/(|s|+1)
 
 while i < abs(length)                                      % while not finished
   i = i + (length>0);                                      % count iterations?!
