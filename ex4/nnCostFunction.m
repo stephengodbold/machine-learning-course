@@ -8,7 +8,7 @@ function [J grad] = nnCostFunction(nn_params, ...
 %   [J grad] = NNCOSTFUNCTON(nn_params, hidden_layer_size, num_labels, ...
 %   X, y, lambda) computes the cost and gradient of the neural network. The
 %   parameters for the neural network are "unrolled" into the vector
-%   nn_params and need to be converted back into the weight matrices. 
+%   nn_params and need to be converted back into the weight matrices.
 % 
 %   The returned parameter grad should be a "unrolled" vector of the
 %   partial derivatives of the neural network.
@@ -38,6 +38,50 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
+
+
+%initial paramaters and sizes
+
+%m = 5000
+%size(X) = 5000, 400 - 5000 20x20 images for training.
+%size(y) = 5000, 1 - 5000 labels for the images.
+%size(Theta1) = 25, 401
+%size(Theta2) = 10, 26
+%input_layer_size = 400
+%hidden_layer_size = 25
+%num_labels = 10
+%lambda = 0
+
+
+%add the bias to X
+XNB = X;
+X = [ones(m, 1) X];
+
+%map the y values to binary vectors
+yv = bsxfun(@eq, y, 1:num_labels);
+
+%calculate the activations through the hidden layer and the output layer
+L2ActivationsNB = sigmoid(X*Theta1');
+L2Activations = [ones(m, 1) L2ActivationsNB];
+
+%L3Activations = 5000x10 (5000 samples, with 10 bits per sample to show likelihood of 1-10 value)
+L3Activations = sigmoid(L2Activations*Theta2');
+
+%sum the diagonal to get the sum(sum()) value of i,k
+oneCase = trace(-yv * log(L3Activations'));
+zeroCase = trace((1-yv) * log(1-L3Activations'));
+
+%calculate the regularization value
+Theta1NB = Theta1(:, 2:end);
+Theta2NB = Theta2(:, 2:end);
+
+thetaVal = (sum(Theta1NB(:) .^ 2)) + (sum(Theta2NB(:) .^ 2));
+regValue = (lambda / (2*m)) * thetaVal;
+
+activationsCost = oneCase - zeroCase; 
+
+J = (1/m * activationsCost) + regValue;
+
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
@@ -53,7 +97,24 @@ Theta2_grad = zeros(size(Theta2));
 %         Hint: We recommend implementing backpropagation using a for-loop
 %               over the training examples if you are implementing it for the 
 %               first time.
-%
+
+%start with yv, then work back through the activation layers
+
+%m = 5
+%XNB = 5 x 3
+%L3Activations = 5 x 3
+%yv = 5 x 3 
+%theta1NB = 5 x 3
+%deltaThree = 5 x 3
+%z2 = 5 x 5
+
+deltaThree = L3Activations - yv;
+z2 = XNB * Theta1NB';
+deltaTwo = deltaThree' * Theta2NB * (sigmoidGradient(z2) .* (1-sigmoidGradient(z2)));
+
+Theta1_grad = deltaTwo;
+Theta2_grad = deltaThree;
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -64,28 +125,11 @@ Theta2_grad = zeros(size(Theta2));
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % -------------------------------------------------------------
 
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
