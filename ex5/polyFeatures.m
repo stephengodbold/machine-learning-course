@@ -15,10 +15,12 @@ X_poly = zeros(numel(X), p);
 %
 % 
 
+X_poly = X;
 
-
-
-
+for pow=1:p
+	powVec = X .^ pow;
+	X_poly(:, pow) = powVec;
+end
 
 % =========================================================================
 

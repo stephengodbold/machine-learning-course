@@ -51,6 +51,20 @@ error_val   = zeros(m, 1);
 %       end
 %
 
+% m = 12;
+for trainingSetSize = 1:m
+	X_train = X(1:trainingSetSize, :);
+	y_train = y(1:trainingSetSize);
+	theta = trainLinearReg(X_train, y_train, lambda);
+
+	J_train = linearRegCostFunction(X_train, y_train, theta, 0);
+	
+	error_train(trainingSetSize, 1) = J_train;
+	error_val(trainingSetSize, 1) = linearRegCostFunction(Xval, yval, theta, 0);
+end
+
+
+
 % ---------------------- Sample Solution ----------------------
 
 

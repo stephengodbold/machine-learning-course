@@ -19,19 +19,30 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+% linear
+% h(x) = 1/4x + 5
 
+% polynomial
+% h(x) = x1 + x2 + x3 ^ 2
 
+%calculate cost
+hypothesis = X * theta;
+errors = hypothesis - y;
 
+costUR = (1 / (2 * m)) * sum(errors .^ 2);
+gradientUR = (1 / m) * (X' * errors);
 
+%remove theta zero
+theta(1) = 0;
 
+J = costUR + (lambda / (2 * m) * sum(theta .^ 2)); 
 
+%calculate gradient then append
+grad = gradientUR + ((lambda / m) * theta);
 
-
-
-
+grad = grad(:);
 
 % =========================================================================
 
-grad = grad(:);
 
 end

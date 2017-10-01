@@ -23,8 +23,7 @@ J_history = zeros(num_iters, 1);
         errors = hypotheses - y;
         
         % Work out the "gradient" 
-        XT = X';
-        gradients = XT * errors;
+        gradients = X' * errors;
 
         % scale by alpha and 1/m.
         thetaChange = (alpha * gradients) .* (1 / m);
